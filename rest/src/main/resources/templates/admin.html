@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin panel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<!--Header-->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="navbar-brand inline">
+        <b th:text="${user.getUsername()}">name</b>
+        with roles:
+        <b th:each="role : ${user.getRoles()}">
+            <span class="font-weight-normal" th:text="${role.getRole()}"></span></b>
+    </div>
+    <div>
+        <a href="/login" class="text-secondary">Logout</a>
+    </div>
+</nav>
+
+<div class="row no-gutters vh-100">
+
+    <!--Left col-->
+    <div class="col-md-2 bg-white">
+        <ul class="nav nav-pills flex-column mt-3">
+            <a class="nav-item nav-link active" th:href="@{/admin}">Admin</a>
+            <a class="nav-item nav-link" th:href="@{/user}">User</a>
+        </ul>
+    </div>
+
+    <!--Right col-->
+    <div class="col-md-10 bg-light">
+        <div class="container-fluid">
+            <div class="h1 mt-3">Admin panel</div>
+
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#userTable">Users table</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#newUser">New User</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+
+                <!--Table Users-->
+                <div class="tab-pane fade show active" id="userTable">
+                    <div class="col-md bg-light border">
+                        <h4 class=" mt-2 mb-3">All users</h4>
+                    </div>
+
+                    <div class="col-md bg-white border">
+                        <table class="table table-striped mt-4">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>E-mail</th>
+                                <th>Role</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody id="users">
+                            </tbody>
+                        </table>
+                        <!--Modal window edit-->
+                        <div class="modal fade" id="updateUser" aria-labelledby="userEditLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" >
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="userEditLabel">Edit user</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <form id = "editUserForm">
+                                            <div class="col-md-6 offset-md-3 text-center mb-4">
+
+                                                <fieldset disabled>
+                                                    <label><b>ID</b></label>
+                                                    <input class="form-control" id="updId" name="id"/>
+                                                </fieldset>
+
+                                                <br>
+                                                <label><b>First name</b></label>
+                                                <input name="firstname" class="form-control" id="updateFirstname"/>
+
+                                                <br>
+                                                <label><b>Last name</b></label>
+                                                <input name="lastname" class="form-control" id="updateLastname"/>
+
+                                                <br>
+                                                <label><b>Age</b></label>
+                                                <input name="age" class="form-control" id="updateAge"/>
+
+                                                <br>
+                                                <label><b>Email</b></label>
+                                                <input name="username" class="form-control" id="updateUsername"/>
+
+                                                <br>
+                                                <label><b>Password</b></label>
+                                                <input name="password" type="password" class="form-control" id="updatePassword"/>
+
+                                                <br>
+                                                <label><b>Role</b></label>
+                                                <select multiple class="form-control" size="2" id="updateRoles" name="rolesId">
+                                                    <option value="1">USER</option>
+                                                    <option selected="selected" value="2">ADMIN</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary" onclick="updateUser()">Edit</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Delete modal-->
+                        <div class="modal fade" aria-labelledby="userDeleteLabel" aria-hidden="true" id="deleteUser">
+                            <div class="modal-dialog" >
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="userDeleteLabel">Delete user</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <form id="deleteUserForm">
+                                            <div class="col-md-6 offset-md-3 text-center mb-4">
+                                                <fieldset disabled>
+                                                    <label><b>ID</b></label>
+                                                    <input name="id" class="form-control" id="delId" \>
+                                                </fieldset>
+
+                                                <br>
+                                                <fieldset disabled>
+                                                    <label><b>First name</b></label>
+                                                    <input name="firstname" class="form-control" id="deleteFirstname"/>
+                                                </fieldset>
+
+                                                <br>
+                                                <fieldset disabled>
+                                                    <label><b>Last name</b></label>
+                                                    <input name="lastname" class="form-control" id="deleteLastname"/>
+                                                </fieldset>
+
+                                                <br>
+                                                <fieldset disabled>
+                                                    <label><b>Age</b></label>
+                                                    <input name="age" class="form-control" id="deleteAge"/>
+                                                </fieldset>
+
+                                                <br>
+                                                <fieldset disabled>
+                                                    <label><b>Email</b></label>
+                                                    <input name="username" class="form-control" id="deleteUsername"/>
+                                                </fieldset>
+
+                                                <br>
+                                                <fieldset disabled>
+                                                    <label><b>Password</b></label>
+                                                    <input name="password" type="password" class="form-control" id="deletePassword"/>
+                                                </fieldset>
+
+                                                <br>
+                                                <fieldset disabled>
+                                                    <label><b>Role</b></label>
+                                                    <select multiple class="form-control" size="2" id="deleteRoles" name="rolesId">
+                                                        <option value="1">USER</option>
+                                                        <option selected="selected" value="2">ADMIN</option>
+                                                    </select>
+                                                </fieldset>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button class="btn btn-danger" onclick="deleteUser()">Delete</button>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--New User-->
+            <div class="tab-pane fade" id="newUser">
+
+                <div class="col-md bg-light border">
+                    <h4 class="mt-2 mb-3">Add new user</h4>
+                </div>
+
+                <div id="new_user" class="col-md bg-white border text-center">
+                    <form class="col-md-6 offset-md-3">
+                        <br>
+                        <label><b>First name</b></label>
+                        <input class="form-control" id="newFirstname" name="firstname"/>
+
+                        <br>
+                        <label><b>Last name</b></label>
+                        <input class="form-control" id="newLastname" name="lastname"/>
+
+                        <br>
+                        <label><b>Age</b></label>
+                        <input class="form-control" id="newAge" name="age"/>
+
+                        <br>
+                        <label><b>Email</b></label>
+                        <input class="form-control" id="newUsername" name="username"/>
+
+                        <br>
+                        <label><b>Password</b></label>
+                        <input class="form-control" id="newPassword" name="password"/>
+
+                        <br>
+                        <label><b>Role</b></label>
+                        <select multiple class="form-control" size="2" id="newRoles" name="rolesId">
+                            <option value="1">USER</option>
+                            <option selected="selected" value="2">ADMIN</option>
+                        </select>
+
+                        <br>
+                        <button onclick="addNewUser()" class="btn btn-success btn-lg"
+                                value="Add new user">Add new user
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" th:src="@{/main.js}"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
