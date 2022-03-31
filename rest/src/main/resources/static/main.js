@@ -86,8 +86,7 @@ async function updateUser() {
         })
 
     $("#updateUser .close").click();
-   getAllUsers();
-   getUser();
+   updateTable();
 }
 
 // Delete User
@@ -114,8 +113,7 @@ async function deleteUser() {
             dataType: 'json'
         })
     $("#deleteUser .close").click();
-    getAllUsers();
-    getUser();
+    updateTable();
 }
 
 // New User
@@ -139,3 +137,12 @@ async function addNewUser() {
     getAllUsers();
     getUser();
 }
+
+// Delete Row
+function updateTable(){
+    let table = document.getElementById("users");
+    while (table.rows.length > 1){
+        table.deleteRow(1)
+    }
+}
+
