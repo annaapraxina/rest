@@ -53,23 +53,4 @@ public class UserController {
         return "admin";
     }
 
-    @PostMapping(value = "/admin/edit")
-    public String updateUser(@ModelAttribute User user, @RequestParam("updId") Long id, @RequestParam("rolesId") List<Long> rolesId) {
-        Set<Role> roles = roleService.getRoleById(rolesId);
-        userService.updateUser(user, id, roles);
-        return "redirect:/admin";
-    }
-
-    @PostMapping(value = "/admin/add")
-    public String addNewUser(@ModelAttribute User user, @RequestParam("rolesId") List<Long> rolesId) {
-        Set<Role> roles = roleService.getRoleById(rolesId);
-        userService.addUser(user, roles);
-        return "redirect:/admin";
-    }
-
-    @PostMapping(value = "/admin/remove")
-    public String deleteUser(@RequestParam("delId") Long id) {
-        userService.removeUserById(id);
-        return "redirect:/admin";
-    }
 }

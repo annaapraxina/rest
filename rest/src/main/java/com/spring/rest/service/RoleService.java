@@ -3,7 +3,6 @@ package com.spring.rest.service;
 import com.spring.rest.model.Role;
 
 import java.util.List;
-import java.util.Set;
 
 public interface RoleService {
     void addRole(Role role);
@@ -16,5 +15,5 @@ public interface RoleService {
 
     List<Role> getAllRoles();
 
-    Set<Role> getRoleById(List<Long> rolesId);
+    Role getRoleById(long id);
 }

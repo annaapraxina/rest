@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class UserDaoImpl implements UserDao{
@@ -16,15 +15,12 @@ public class UserDaoImpl implements UserDao{
     private EntityManager entityManager;
 
     @Override
-    public void addUser(User user, Set<Role> roles) {
-        user.setRoles(roles);
+    public void addUser(User user) {
         entityManager.persist(user);
     }
 
     @Override
-    public void updateUser(User user, Long id, Set<Role> roles) {
-        user.setId(id);
-        user.setRoles(roles);
+    public void updateUser(User user) {
         entityManager.merge(user);
     }
 

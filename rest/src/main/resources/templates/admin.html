@@ -113,11 +113,7 @@
 
                                                 <br>
                                                 <label><b>Role</b></label>
-                                                <select multiple class="form-control" size="2" id="updateRoles" name="rolesId">
-                                                    <option th:each="role : ${roles}"
-                                                            th:value="${role.getId()}"
-                                                            th:text="${role.getRole()}"
-                                                            th:selected="${role.getRole().equals('USER')}">Roles</option>
+                                                <select multiple class="form-control" size="2" id="updateRoles" name="roles">
                                                 </select>
 
                                             </div>
@@ -183,10 +179,7 @@
                                                 <br>
                                                 <fieldset disabled>
                                                     <label><b>Role</b></label>
-                                                    <select multiple class="form-control" size="2" id="deleteRoles" name="rolesId">
-                                                        <option th:each="role : ${roles}"
-                                                                th:value="${role.getId()}"
-                                                                th:text="${role.getRole()}">Roles</option>
+                                                    <select multiple class="form-control" size="2" id="deleteRoles" name="roles">
                                                     </select>
                                                 </fieldset>
                                             </div>
@@ -235,11 +228,7 @@
 
                         <br>
                         <label><b>Role</b></label>
-                        <select multiple class="form-control" size="2" id="newRoles" name="rolesId">
-                            <option th:each="role : ${roles}"
-                                    th:value="${role.getId()}"
-                                    th:text="${role.getRole()}"
-                                    th:selected="${role.getRole().equals('USER')}">Roles</option>
+                        <select multiple class="form-control" size="2" id="newRoles" name="roles">
                         </select>
 
                         <br>

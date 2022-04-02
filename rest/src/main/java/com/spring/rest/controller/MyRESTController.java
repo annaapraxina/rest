@@ -11,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -36,6 +35,12 @@ public class MyRESTController {
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
+    @GetMapping("/roles")
+    public ResponseEntity<List<Role>> getAllRoles(){
+        List<Role> allRoles = roleService.getAllRoles();
+        return new ResponseEntity<>(allRoles, HttpStatus.OK);
+    }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable long id){
         User user = userService.getUserById(id);
@@ -44,15 +49,13 @@ public class MyRESTController {
 
     @PostMapping("/users")
     public ResponseEntity<User> addNewUser(@RequestBody User user){
-        Set<Role> roles = roleService.getRoleById(user.getRolesId());
-        userService.addUser(user, roles);
+        userService.addUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable long id){
-        Set<Role> roles = roleService.getRoleById(user.getRolesId());
-        userService.updateUser(user, id, roles);
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        userService.updateUser(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

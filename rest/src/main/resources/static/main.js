@@ -48,6 +48,31 @@ function getAllUsers(){
 
 getAllUsers();
 
+// Get Roles
+
+function getAllRoles(){
+    fetch("/api/roles")
+        .then (res => res.json())
+        .then(roles => {
+            let temp = "";
+            roles.forEach(function (role) {
+                temp += `<option value ="${role.id}">${role.role}</option>`
+            })
+            document.getElementById("updateRoles").innerHTML = temp;
+            document.getElementById("deleteRoles").innerHTML = temp;
+            document.getElementById("newRoles").innerHTML = temp;
+        })
+}
+
+getAllRoles();
+
+function getRoles(list){
+    let roles = [];
+    list.forEach(r => {
+        roles.push({id: r.value, role: r.text});
+    });
+    return roles;
+}
 
 // Edit User
 function modalWindowEditUser(id) {
@@ -61,13 +86,14 @@ function modalWindowEditUser(id) {
                 $('#updateAge').val(user.age)
                 $('#updateUsername').val(user.username)
                 $('#updatePassword').val(user.password)
-                $('#updateRoles').val(user.roles.map(e => e.role))
+                $('#updateRoles').val(user.role)
             })
         });
 }
 
 async function updateUser() {
 
+    let roles = getRoles(Array.from(document.getElementById('updateRoles').selectedOptions));
     let user = {
         id: document.getElementById('updId').value,
         firstname: document.getElementById('updateFirstname').value,
@@ -75,7 +101,7 @@ async function updateUser() {
         age: document.getElementById('updateAge').value,
         username: document.getElementById('updateUsername').value,
         password: document.getElementById('updatePassword').value,
-        rolesId: $('#updateRoles').val(),
+        roles: roles
     }
 
     await fetch("/api/users/" + document.getElementById("updId").value,
@@ -91,6 +117,7 @@ async function updateUser() {
 
 // Delete User
 function modalWindowDeleteUser(id){
+
     fetch("/api/users/" + id,
         {method: 'GET', dataType: 'json'})
         .then((res) => {
@@ -101,7 +128,7 @@ function modalWindowDeleteUser(id){
                 $('#deleteAge').val(user.age)
                 $('#deleteUsername').val(user.username)
                 $('#deletePassword').val(user.password)
-                $('#deleteRoles').val(user.roles.map(e => e.role))
+                $('#deleteRoles').val(user.role)
             })
         });
 }
@@ -118,13 +145,14 @@ async function deleteUser() {
 
 // New User
 async function addNewUser() {
+    let roles = getRoles(Array.from(document.getElementById('newRoles').selectedOptions));
     let user = {
         firstname: document.getElementById('newFirstname').value,
         lastname: document.getElementById('newLastname').value,
         age: document.getElementById('newAge').value,
         username: document.getElementById('newUsername').value,
         password: document.getElementById('newPassword').value,
-        rolesId: $('#newRoles').val(),
+        roles: roles
     }
 
     await fetch("/api/users",
